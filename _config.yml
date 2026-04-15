@@ -1,0 +1,11 @@
+# GitHub Pages configuration
+title: Book for Peace
+description: We do not wait for peace. We make it.
+theme: null
+include:
+  - index.html
+  - sky.html
+  - lights.html
+  - share.html
+  - style.css
+  - script.js
