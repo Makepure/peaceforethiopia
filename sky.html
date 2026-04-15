@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☁️ Sky Canvas · Book for Peace</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .sky-fullpage {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #a8d8ea 0%, #c5e4f3 30%, #d9edf7 60%, #fdfbf7 100%);
+        }
+        
+        .sky-header-full {
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .sky-header-full h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--primary-dark);
+        }
+        
+        .sky-canvas-full {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+        
+        .canvas-container {
+            background: linear-gradient(180deg, #7ec8e0 0%, #a8d8ea 50%, #c5e4f3 100%);
+            border-radius: 40px;
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .sky-messages-container {
+            position: relative;
+            min-height: 500px;
+            padding: 2rem;
+        }
+        
+        .floating-message {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-weight: 500;
+            border: 1px solid white;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-message:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            z-index: 100;
+        }
+        
+        .sky-actions-full {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .back-home {
+            display: inline-block;
+            margin: 2rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-home:hover {
+            text-decoration: underline;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+    </style>
+</head>
+<body class="sky-fullpage">
+    <div class="peace-bg"></div>
+    
+    <a href="index.html" class="back-home">
+        <i class="fas fa-arrow-left"></i> Back to Book for Peace
+    </a>
+    
+    <header class="sky-header-full">
+        <h1><i class="fas fa-cloud-sun"></i> The Sky Canvas</h1>
+        <p style="color: var(--primary-dark); font-size: 1.2rem;">Every message becomes a light in our sky</p>
+    </header>
+    
+    <div class="sky-canvas-full">
+        <div class="canvas-container">
+            <div class="sky-messages-container" id="skyMessagesContainer">
+                <!-- Messages will be dynamically placed here -->
+            </div>
+        </div>
+        
+        <div class="sky-actions-full">
+            <button class="btn btn-primary" onclick="addNewSkyMessage()">
+                <i class="fas fa-cloud-upload-alt"></i> Add Your Light
+            </button>
+            <button class="btn btn-secondary" onclick="refreshSky()">
+                <i class="fas fa-sync-alt"></i> Refresh Sky
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Load messages and display in sky
+        function loadSkyMessages() {
+            const container = document.getElementById('skyMessagesContainer');
+            const stored = localStorage.getItem('bookforpeace_messages');
+            let messages = [];
+            
+            if (stored) {
+                try {
+                    messages = JSON.parse(stored);
+                } catch (e) {
+                    messages = [];
+                }
+            }
+            
+            // Get recent messages (last 20)
+            const recentMessages = messages
+                .sort((a, b) => b.timestamp - a.timestamp)
+                .slice(0, 20);
+            
+            container.innerHTML = '';
+            
+            recentMessages.forEach((msg, index) => {
+                const messageEl = createFloatingMessage(msg, index);
+                container.appendChild(messageEl);
+            });
+            
+            // Add some decorative elements
+            addDecorativeElements(container);
+        }
+        
+        function createFloatingMessage(msg, index) {
+            const div = document.createElement('div');
+            div.className = 'floating-message';
+            
+            const shortMsg = msg.message.length > 40 ? msg.message.substring(0, 40) + '...' : msg.message;
+            div.innerHTML = `${msg.emoji} ${shortMsg}`;
+            
+            // Random position
+            const left = 10 + (index * 37) % 80;
+            const top = 15 + (index * 23) % 70;
+            
+            div.style.left = left + '%';
+            div.style.top = top + '%';
+            div.style.animationDelay = (index * 0.5) + 's';
+            
+            // Add tooltip on hover
+            div.title = `From: ${msg.author || 'Anonymous'}\n${msg.message}`;
+            
+            // Click to view full message
+            div.onclick = () => {
+                alert(`${msg.emoji} "${msg.message}"\n— ${msg.author || 'Anonymous'}${msg.location ? ', ' + msg.location : ''}`);
+            };
+            
+            return div;
+        }
+        
+        function addDecorativeElements(container) {
+            // Add some clouds
+            for (let i = 0; i < 5; i++) {
+                const cloud = document.createElement('div');
+                cloud.style.cssText = `
+                    position: absolute;
+                    background: rgba(255,255,255,0.3);
+                    border-radius: 60px;
+                    width: ${80 + i * 20}px;
+                    height: 30px;
+                    left: ${10 + i * 20}%;
+                    top: ${20 + i * 15}%;
+                    pointer-events: none;
+                    filter: blur(2px);
+                `;
+                container.appendChild(cloud);
+            }
+        }
+        
+        function addNewSkyMessage() {
+            const messages = [
+                '🕊️ Peace for all beings',
+                '☮️ Harmony and understanding',
+                '💖 Love is the answer',
+                '🌈 Hope for tomorrow',
+                '🌟 Let your light shine',
+                '🌍 One world, one peace'
+            ];
+            
+            const container = document.getElementById('skyMessagesContainer');
+            const newMsg = document.createElement('div');
+            newMsg.className = 'floating-message';
+            newMsg.innerHTML = messages[Math.floor(Math.random() * messages.length)];
+            
+            newMsg.style.left = Math.random() * 70 + 15 + '%';
+            newMsg.style.top = Math.random() * 60 + 20 + '%';
+            
+            container.appendChild(newMsg);
+            
+            // Animate in
+            newMsg.style.opacity = '0';
+            newMsg.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                newMsg.style.transition = 'all 0.5s';
+                newMsg.style.opacity = '1';
+                newMsg.style.transform = 'scale(1)';
+            }, 10);
+            
+            // Remove oldest if too many
+            const messages = container.querySelectorAll('.floating-message');
+            if (messages.length > 25) {
+                messages[0].style.opacity = '0';
+                setTimeout(() => messages[0].remove(), 300);
+            }
+        }
+        
+        function refreshSky() {
+            loadSkyMessages();
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadSkyMessages);
+        
+        // Expose functions
+        window.addNewSkyMessage = addNewSkyMessage;
+        window.refreshSky = refreshSky;
+    </script>
+</body>
+</html>
