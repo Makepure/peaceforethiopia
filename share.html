@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Share Peace · Book for Peace</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .share-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .share-card-large {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .share-card-large h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary-dark);
+            text-align: center;
+        }
+        
+        .type-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        
+        .type-option {
+            padding: 0.75rem;
+            border: 2px solid rgba(91, 138, 122, 0.2);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .type-option.active {
+            border-color: var(--primary);
+            background: rgba(91, 138, 122, 0.05);
+        }
+        
+        .type-option i {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            color: var(--primary);
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .success-message i {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .back-home-large {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body class="share-page">
+    <div class="peace-bg"></div>
+    
+    <div class="share-card-large" id="shareFormContainer">
+        <h2><i class="fas fa-hands-helping"></i> Share Your Peace</h2>
+        
+        <form onsubmit="submitQuickShare(event)">
+            <div class="type-selector">
+                <div class="type-option active" onclick="selectQuickType('personal')">
+                    <i class="fas fa-user"></i>
+                    <span>Personal</span>
+                </div>
+                <div class="type-option" onclick="selectQuickType('couple')">
+                    <i class="fas fa-heart"></i>
+                    <span>Couple</span>
+                </div>
+                <div class="type-option" onclick="selectQuickType('family')">
+                    <i class="fas fa-users"></i>
+                    <span>Family</span>
+                </div>
+                <div class="type-option" onclick="selectQuickType('group')">
+                    <i class="fas fa-user-friends"></i>
+                    <span>Group</span>
+                </div>
+                <div class="type-option" onclick="selectQuickType('capsule')">
+                    <i class="fas fa-hourglass-half"></i>
+                    <span>Capsule</span>
+                </div>
+            </div>
+            
+            <input type="hidden" id="quickType" value="personal">
+            
+            <div class="form-group">
+                <label><i class="fas fa-user-circle"></i> Your Name</label>
+                <input type="text" id="quickName" placeholder="Anonymous (optional)">
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-feather-alt"></i> Your Message *</label>
+                <textarea id="quickMessage" rows="4" placeholder="Share your peace..." required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-map-pin"></i> Location</label>
+                <input type="text" id="quickLocation" placeholder="City, Country (optional)">
+            </div>
+            
+            <div class="form-group">
+                <label>Choose an emoji</label>
+                <div class="emoji-selector">
+                    <span class="emoji-option selected" onclick="selectQuickEmoji('🕊️')">🕊️</span>
+                    <span class="emoji-option" onclick="selectQuickEmoji('☮️')">☮️</span>
+                    <span class="emoji-option" onclick="selectQuickEmoji('💖')">💖</span>
+                    <span class="emoji-option" onclick="selectQuickEmoji('🌈')">🌈</span>
+                    <span class="emoji-option" onclick="selectQuickEmoji('🌟')">🌟</span>
+                    <span class="emoji-option" onclick="selectQuickEmoji('🌍')">🌍</span>
+                </div>
+                <input type="hidden" id="quickEmoji" value="🕊️">
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <i class="fas fa-paper-plane"></i> Share Peace Message
+            </button>
+        </form>
+        
+        <a href="index.html" class="back-home-large">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+    </div>
+    
+    <div class="share-card-large" id="successContainer" style="display: none;">
+        <div class="success-message">
+            <i class="fas fa-check-circle"></i>
+            <h2>Message Shared!</h2>
+            <p>Your light has been added to the sky ✨</p>
+            <br>
+            <a href="index.html" class="btn btn-primary">Return Home</a>
+            <button class="btn btn-secondary" onclick="shareAnother()" style="margin-top: 1rem;">Share Another</button>
+        </div>
+    </div>
+    
+    <script>
+        let quickSelectedType = 'personal';
+        let quickSelectedEmoji = '🕊️';
+        
+        function selectQuickType(type) {
+            quickSelectedType = type;
+            document.getElementById('quickType').value = type;
+            
+            document.querySelectorAll('.type-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            event.target.closest('.type-option').classList.add('active');
+        }
+        
+        function selectQuickEmoji(emoji) {
+            quickSelectedEmoji = emoji;
+            document.getElementById('quickEmoji').value = emoji;
+            
+            document.querySelectorAll('.emoji-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.textContent === emoji) {
+                    opt.classList.add('selected');
+                }
+            });
+        }
+        
+        function submitQuickShare(event) {
+            event.preventDefault();
+            
+            const type = document.getElementById('quickType').value;
+            const name = document.getElementById('quickName').value || 'Anonymous';
+            const message = document.getElementById('quickMessage').value;
+            const location = document.getElementById('quickLocation').value;
+            const emoji = document.getElementById('quickEmoji').value;
+            
+            if (!message) return;
+            
+            // Get existing messages
+            const stored = localStorage.getItem('bookforpeace_messages');
+            let messages = stored ? JSON.parse(stored) : [];
+            
+            // Add new message
+            messages.unshift({
+                id: Date.now().toString(),
+                emoji: emoji,
+                message: message,
+                author: name,
+                location: location || null,
+                timestamp: Date.now(),
+                type: type
+            });
+            
+            // Save
+            localStorage.setItem('bookforpeace_messages', JSON.stringify(messages));
+            
+            // Show success
+            document.getElementById('shareFormContainer').style.display = 'none';
+            document.getElementById('successContainer').style.display = 'block';
+        }
+        
+        function shareAnother() {
+            document.getElementById('shareFormContainer').style.display = 'block';
+            document.getElementById('successContainer').style.display = 'none';
+            document.getElementById('quickMessage').value = '';
+            document.getElementById('quickName').value = '';
+            document.getElementById('quickLocation').value = '';
+        }
+        
+        // Expose functions
+        window.selectQuickType = selectQuickType;
+        window.selectQuickEmoji = selectQuickEmoji;
+        window.submitQuickShare = submitQuickShare;
+        window.shareAnother = shareAnother;
+    </script>
+</body>
+</html>
