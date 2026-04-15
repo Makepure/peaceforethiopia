@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Book for Peace - We do not wait for peace. We make it. Share your peace messages with the world.">
+    <meta property="og:title" content="Book for Peace ☁️">
+    <meta property="og:description" content="We do not wait for peace. We make it.">
+    <meta property="og:type" content="website">
+    <title>☁️ Book for Peace · We Make It</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="peace-bg"></div>
+    
+    <main class="container">
+        <!-- Hero Section -->
+        <header class="hero">
+            <h1 class="hero-title">
+                <span class="title-line">We do not wait</span>
+                <span class="title-line accent">for peace.</span>
+            </h1>
+            <h2 class="hero-subtitle">We make it.</h2>
+            <div class="hero-decoration">
+                <i class="fas fa-dove"></i>
+                <span class="decoration-line"></span>
+                <i class="fas fa-cloud"></i>
+                <span class="decoration-line"></span>
+                <i class="fas fa-heart"></i>
+            </div>
+        </header>
+
+        <!-- Sky Canvas Section -->
+        <section class="sky-section card">
+            <div class="section-header">
+                <h2><i class="fas fa-cloud-sun"></i> The Sky Canvas</h2>
+                <a href="sky.html" class="view-all-link">
+                    View Full Sky <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="sky-preview">
+                <div class="sky-visualization" id="skyPreview">
+                    <!-- Dynamic sky elements will be added via JavaScript -->
+                    <div class="cloud cloud-1"></div>
+                    <div class="cloud cloud-2"></div>
+                    <div class="cloud cloud-3"></div>
+                    <div class="bird bird-1">🕊️</div>
+                    <div class="bird bird-2">🕊️</div>
+                    <div class="message-bubble" id="previewMessage">Peace begins with a smile 😊</div>
+                </div>
+                <button class="btn btn-primary add-to-sky-btn" onclick="addToSkyCanvas()">
+                    <i class="fas fa-cloud-upload-alt"></i> Add Your Light
+                </button>
+            </div>
+        </section>
+
+        <!-- Share Your Peace Section -->
+        <section class="share-section">
+            <h2 class="section-title">
+                <i class="fas fa-hands-helping"></i> Share Your Peace
+            </h2>
+            
+            <div class="share-grid">
+                <!-- Personal -->
+                <div class="share-card" onclick="openShareModal('personal')">
+                    <div class="card-icon personal">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3>PERSONAL</h3>
+                    <p>Share your peace word</p>
+                    <span class="card-badge">✨</span>
+                </div>
+                
+                <!-- Couple -->
+                <div class="share-card" onclick="openShareModal('couple')">
+                    <div class="card-icon couple">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>COUPLE</h3>
+                    <p>Share your love</p>
+                    <span class="card-badge">💑</span>
+                </div>
+                
+                <!-- Family -->
+                <div class="share-card" onclick="openShareModal('family')">
+                    <div class="card-icon family">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>FAMILY</h3>
+                    <p>Share family peace</p>
+                    <span class="card-badge">👨‍👩‍👧‍👦</span>
+                </div>
+                
+                <!-- Group -->
+                <div class="share-card" onclick="openShareModal('group')">
+                    <div class="card-icon group">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3>GROUP</h3>
+                    <p>Share group peace</p>
+                    <span class="card-badge">👥</span>
+                </div>
+                
+                <!-- Time Capsule -->
+                <div class="share-card featured" onclick="openShareModal('capsule')">
+                    <div class="card-icon capsule">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <h3>TIME CAPSULE</h3>
+                    <p>Seal a message for the future</p>
+                    <span class="card-badge">⭐</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Lights Section -->
+        <section class="recent-section card">
+            <div class="section-header">
+                <h2><i class="fas fa-book-open"></i> Recent Lights</h2>
+                <a href="lights.html" class="view-all-link">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="recent-lights" id="recentLights">
+                <!-- Dynamically populated -->
+                <div class="light-item">
+                    <span class="light-emoji">🎁</span>
+                    <div class="light-content">
+                        <p class="light-message">Sending peace and love to everyone 🌍</p>
+                        <span class="light-meta">— Anonymous · 2 min ago</span>
+                    </div>
+                </div>
+                <div class="light-item">
+                    <span class="light-emoji">🕊️</span>
+                    <div class="light-content">
+                        <p class="light-message">May all beings be happy and free</p>
+                        <span class="light-meta">— Sarah · 15 min ago</span>
+                    </div>
+                </div>
+                <div class="light-item">
+                    <span class="light-emoji">☮️</span>
+                    <div class="light-content">
+                        <p class="light-message">Peace within, peace without</p>
+                        <span class="light-meta">— Michael · 1 hour ago</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Peace Counter -->
+        <div class="peace-counter">
+            <div class="counter-item">
+                <span class="counter-number" id="messageCount">1,247</span>
+                <span class="counter-label">Messages of Peace</span>
+            </div>
+            <div class="counter-item">
+                <span class="counter-number" id="countriesCount">89</span>
+                <span class="counter-label">Countries</span>
+            </div>
+            <div class="counter-item">
+                <span class="counter-number" id="todayCount">42</span>
+                <span class="counter-label">Today</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Share Modal -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Share Your Peace</h3>
+                <button class="modal-close" onclick="closeShareModal()">&times;</button>
+            </div>
+            <form id="shareForm" onsubmit="submitPeaceMessage(event)">
+                <input type="hidden" id="messageType" value="personal">
+                
+                <div class="form-group">
+                    <label for="authorName">
+                        <i class="fas fa-user-circle"></i> Your Name (optional)
+                    </label>
+                    <input type="text" id="authorName" placeholder="Anonymous" maxlength="50">
+                </div>
+                
+                <div class="form-group">
+                    <label for="peaceMessage">
+                        <i class="fas fa-feather-alt"></i> Your Peace Message *
+                    </label>
+                    <textarea id="peaceMessage" rows="4" placeholder="Share your thoughts of peace..." required maxlength="500"></textarea>
+                    <span class="char-counter" id="charCount">0/500</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">
+                        <i class="fas fa-map-pin"></i> Location (optional)
+                    </label>
+                    <input type="text" id="location" placeholder="City, Country">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-tag"></i> Choose an emoji
+                    </label>
+                    <div class="emoji-selector" id="emojiSelector">
+                        <span class="emoji-option" onclick="selectEmoji('🕊️')">🕊️</span>
+                        <span class="emoji-option" onclick="selectEmoji('☮️')">☮️</span>
+                        <span class="emoji-option" onclick="selectEmoji('💖')">💖</span>
+                        <span class="emoji-option" onclick="selectEmoji('🌈')">🌈</span>
+                        <span class="emoji-option" onclick="selectEmoji('🌟')">🌟</span>
+                        <span class="emoji-option" onclick="selectEmoji('🌍')">🌍</span>
+                        <span class="emoji-option" onclick="selectEmoji('✨')">✨</span>
+                        <span class="emoji-option" onclick="selectEmoji('🎁')">🎁</span>
+                    </div>
+                    <input type="hidden" id="selectedEmoji" value="🕊️">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeShareModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Share Peace
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Message shared!</span>
+    </div>
+
+    <footer class="footer">
+        <p>☁️ Book for Peace · We do not wait for peace. We make it.</p>
+        <div class="footer-links">
+            <a href="sky.html">Sky Canvas</a>
+            <span>·</span>
+            <a href="lights.html">All Lights</a>
+            <span>·</span>
+            <a href="#" onclick="showAbout()">About</a>
+        </div>
+        <p class="copyright">© 2024 · Open source peace project</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
