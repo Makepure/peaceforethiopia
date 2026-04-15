@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📖 All Lights · Book for Peace</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .lights-page {
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .lights-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .lights-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--primary-dark);
+        }
+        
+        .lights-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 30px;
+            border: 1px solid rgba(91, 138, 122, 0.3);
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .filter-btn:hover {
+            background: var(--primary-light);
+            color: white;
+        }
+        
+        .message-card {
+            background: white;
+            border-radius: var(--border-radius-sm);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .message-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateX(4px);
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .message-emoji-large {
+            font-size: 2.5rem;
+            background: var(--accent-light);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .message-info {
+            flex: 1;
+        }
+        
+        .message-author {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .message-type {
+            display: inline-block;
+            padding: 0.2rem 0.75rem;
+            background: rgba(91, 138, 122, 0.1);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 0.5rem;
+        }
+        
+        .message-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        
+        .message-footer {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        
+        .load-more {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 1rem 0 2rem 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body class="lights-page">
+    <div class="peace-bg"></div>
+    
+    <a href="index.html" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+    
+    <div class="lights-container">
+        <header class="lights-header">
+            <h1><i class="fas fa-book-open"></i> All Lights</h1>
+            <p>Messages of peace from around the world</p>
+        </header>
+        
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterMessages('all')">All</button>
+            <button class="filter-btn" onclick="filterMessages('personal')">Personal</button>
+            <button class="filter-btn" onclick="filterMessages('couple')">Couple</button>
+            <button class="filter-btn" onclick="filterMessages('family')">Family</button>
+            <button class="filter-btn" onclick="filterMessages('group')">Group</button>
+            <button class="filter-btn" onclick="filterMessages('capsule')">Time Capsule</button>
+        </div>
+        
+        <div id="messagesList"></div>
+        
+        <div class="load-more">
+            <button class="btn btn-secondary" onclick="loadMoreMessages()">
+                <i class="fas fa-chevron-down"></i> Load More
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        let allMessages = [];
+        let currentFilter = 'all';
+        let displayCount = 10;
+        
+        // Load messages
+        function loadAllMessages() {
+            const stored = localStorage.getItem('bookforpeace_messages');
+            if (stored) {
+                try {
+                    allMessages = JSON.parse(stored);
+                } catch (e) {
+                    allMessages = [];
+                }
+            }
+            
+            // Sort by newest first
+            allMessages.sort((a, b) => b.timestamp - a.timestamp);
+            
+            renderMessages();
+        }
+        
+        function renderMessages() {
+            const container = document.getElementById('messagesList');
+            
+            let filtered = allMessages;
+            if (currentFilter !== 'all') {
+                filtered = allMessages.filter(m => m.type === currentFilter);
+            }
+            
+            const displayMessages = filtered.slice(0, displayCount);
+            
+            if (displayMessages.length === 0) {
+                container.innerHTML = '<p style="text-align: center; padding: 3rem; color: var(--text-light);">No messages yet. Be the first to share! ✨</p>';
+                return;
+            }
+            
+            container.innerHTML = displayMessages.map(msg => `
+                <div class="message-card">
+                    <div class="message-header">
+                        <div class="message-emoji-large">${msg.emoji}</div>
+                        <div class="message-info">
+                            <span class="message-author">${escapeHtml(msg.author || 'Anonymous')}</span>
+                            <span class="message-type">${msg.type || 'personal'}</span>
+                            ${msg.location ? `<div><i class="fas fa-map-pin"></i> ${escapeHtml(msg.location)}</div>` : ''}
+                        </div>
+                    </div>
+                    <div class="message-text">${escapeHtml(msg.message)}</div>
+                    <div class="message-footer">
+                        <span><i class="far fa-clock"></i> ${new Date(msg.timestamp).toLocaleString()}</span>
+                        <span><i class="far fa-heart"></i> Peace</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Hide load more if no more messages
+            const loadMoreBtn = document.querySelector('.load-more');
+            if (displayCount >= filtered.length) {
+                loadMoreBtn.style.display = 'none';
+            } else {
+                loadMoreBtn.style.display = 'block';
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function filterMessages(type) {
+            currentFilter = type;
+            displayCount = 10;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderMessages();
+        }
+        
+        function loadMoreMessages() {
+            displayCount += 10;
+            renderMessages();
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadAllMessages);
+        
+        // Expose functions
+        window.filterMessages = filterMessages;
+        window.loadMoreMessages = loadMoreMessages;
+    </script>
+</body>
+</html>
